@@ -7,26 +7,119 @@
     <title>Blackjack: Would you like to play a game?</title>
   </head>
   <body>
-    <div class="header">
+    <div class="body-table">
+    <div class="header table-row">
       <h1>Blackjack, let's play</h1>
     </div>
-    <div class="dealer">
-      <span id="shoe"></span>
-      <span id="dealer">
-        <span class="cards">
-        </span>
-        <span class="value">
-      </span>
+    <div class="dealer-space table-row">DEALER SPACE
+      <div id="shoe" class="table-col">
+        <div class='shoeCard' id="s0"></div>
+        <div class='shoeCard' id="s1" style="margin-top: 2px;"></div>
+        <div class='shoeCard' id="s2" style="margin-top: 4px;"></div>
+        <div class='shoeCard' id="s3" style="margin-top: 6px;"></div>
+        <div class='shoeCard' id="s4" style="margin-top: 8px;"></div>
+
+      </div>
+      <div class="dealer table-col">Dealer Hand
+        <div class="handCards table-row">
+          <img src="images/b.jpg" class="card"/>
+          <img src="images/ah.gif" class="card" style="margin-left: 15px"/>
+          <img src="images/jh.gif" class="card" style="margin-left: 20px"/>
+        </div>
+
+        <div class="value table-row">
+          DEALER HAND VALUE
+        </div>
+      </div>
+      <div class="discard table-col">
+        <img src="images/b.jpg" class="card"/>
+      </div>
     </div>
-    <div class="players">
-      <span id="player0">
-        <span class="cards">
-        </span>
-        <span class="value">
-        </span>
-      </span>
+    <div class="table-row">
+      <div class="table-col"> <div class="button" id="deal">Deal</div> </div>
+      <div class="table-col" id="hand-result">HAND RESULT</div>
     </div>
-    <div class="footer">
+    <div class="players table-row">PLAYERS SPACE
+      <div id="player0" style="float: right" class="table-col"><span class="player-name" title="Double click to change player's name">Player</span>
+        <div class="handCards table-row">
+          <img class="card" src="images/b.jpg"/>
+          <img class="card" src="images/as.gif" style="margin-left: 15px"/>
+
+        </div>
+        <div class="value table-row">
+          PLAYER HAND VALUE
+        </div>
+        <div class="table-row playerButtons">
+          <div id="hit" class="button table-col">Hit Me</div>
+          <div id="stand" class="button table-col">Stand</div>
+      </div>
     </div>
+
+  </div>
+</div>
+<div class="table-row">
+  <footer>
+    <p></p>
+    <p>Card faces thanks to <a href="https://www.waste.org/~oxymoron/cards/">oxymoron</a><br/>
+      Card back thanks to <a href="https://commons.wikimedia.org/wiki/File:Bicyclebackside.jpg">Wikimedia Commons</a></p>
+
+  </footer>
+</div>
+  <script>
+    $( document ).ready();
+
+    //attempt to make cards move
+    $('#card').click(function() {
+  $(this)
+    .css({ position:'relative', left:0 })
+    .rotate({ count:2, easing:'ease-in', animate:{ left:120 } })
+    .fadeTo(400, 0.1)
+    .fadeTo(300, 1)
+    .delay(200)
+    .rotate({ endDeg:-360, count:3, easing:'ease-out', animate:{ left:0 } });
+});
+    //make player name editable borrowed from http://jsfiddle.net/adamb/Hbww2/
+    //plugin to make any element text editable
+    $.fn.extend({
+    	editable: function () {
+    		$(this).each(function () {
+    			var $el = $(this),
+    			$edittextbox = $('<input type="text"></input>').css('min-width', $el.width()),
+    			submitChanges = function () {
+    				if ($edittextbox.val() !== '') {
+    					$el.html($edittextbox.val());
+    					$el.show();
+    					$el.trigger('editsubmit', [$el.html()]);
+    					$(document).unbind('click', submitChanges);
+    					$edittextbox.detach();
+    				}
+    			},
+    			tempVal;
+    			$edittextbox.click(function (event) {
+    				event.stopPropagation();
+    			});
+
+    			$el.dblclick(function (e) {
+    				tempVal = $el.html();
+    				$edittextbox.val(tempVal).insertBefore(this)
+                    .bind('keypress', function (e) {
+    					var code = (e.keyCode ? e.keyCode : e.which);
+    					if (code == 13) {
+    						submitChanges();
+    					}
+    				}).select();
+    				$el.hide();
+    				$(document).click(submitChanges);
+    			});
+    		});
+    		return this;
+    	}
+    });
+
+    //implement plugin
+    $('.player-name').editable().on('editsubmit', function (event, val) {
+        console.log('text changed to ' + val);
+    });
+  </script>
   </body>
 </html>
