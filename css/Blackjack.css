@@ -1,0 +1,115 @@
+
+.body-table {
+  background-image: url("../images/felt.jpg");
+  background-size: 100%;
+  width: auto;
+  display: table;
+  padding: 10px;
+}
+.table-row {
+  display: table-row;
+  width: auto;
+  clear: both;
+}
+.table-col {
+  float: left;
+  display: table-column;
+}
+img {
+  height: 100px;
+  width: 64px;
+}
+.header {
+  background-color: lightgreen;
+  text-align: center;
+  font-family: serif, sans-serif;
+  border: 2px solid black;
+  width: 90%;
+}
+.dealer {
+  border: 2px solid blue;
+  height: 200px;
+  margin: 10px;
+  border: 5px;
+}
+#shoe {
+  border: 1px solid black;
+  border-radius: 4px;
+  margin-left: auto;
+  height: 150px;
+  width: 110px;
+  float: left;
+}
+.shoeCard {
+  width: 100px;
+  height: 64px;
+  position: absolute;
+  margin: 5px;
+  background-image: url("../images/shoeCard.jpg");
+}
+
+.playerCard {
+  width: 64px;
+  height: 100px;
+  position: absolute;
+  margin-left: +5px;
+
+}
+#dealer {
+  height: 150px;
+  float: inherit;
+  margin-left: 15px;
+  font-family: "Comic Sans MS";
+}
+.handCards {
+  height: 120px;
+  width: 120px;
+
+}
+.card {
+  position: absolute;
+}
+.value {
+  position: relative;
+}
+#hand-result {
+  font-size: 2em;
+  font-weight: bold;
+  float: right;
+}
+
+.button {
+  font-family: Arial;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: lightblue;
+  box-shadow: 2px 2px 5px blue;
+  height: auto;
+  width: auto;
+  margin: 5px 4px 2px 4px;
+  padding: 0 5px 0 5px;
+}
+.button:hover {
+  font-family: Arial;
+  color: red;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: darkgreen;
+  box-shadow: 2px 2px 5px blue;
+  height: auto;
+  width: auto;
+  margin: 5px 4px 2px 4px;
+  padding: 0 5px 0 5px;
+}
+.button:active {
+  font-family: Arial;
+  color: black;
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: red;
+  box-shadow: 2px 2px 5px white;
+  height: auto;
+  width: auto;
+  margin: 5px 4px 2px 4px;
+  padding: 0 5px 0 5px;
+}
