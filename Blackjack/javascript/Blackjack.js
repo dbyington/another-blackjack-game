@@ -5,13 +5,21 @@ The game of Blackjack
 ***/
 
 // Our main game object
-function BlackJack (playerCount, decks) {
+function Blackjack (playerCount, decks) {
   var self = this;
   this.players = [];
+  this.dealerHitLimit = 18;
+  this.handInPlay = false;
+  this.cardsInShoe = [];
+  this.cardsInPlay = 0;
+  this.cardsInDiscard = 0;
+  this.decks = decks !== undefined ? decks : 1;
+  this.deck = {
+
+  }
+  this.shoeHeight = 150;
+  this.cardWidth = 64;
   this.card = {
-    '1C': { img: 'images/1c.gif', value: 1},
-    '1S': { img: 'images/1s.gif', value: 1},
-    '1D': { img: 'images/1d.gif', value: 1},
     '2C': { img: 'images/2c.gif', value: 2},
     '2S': { img: 'images/2s.gif', value: 2},
     '2D': { img: 'images/2d.gif', value: 2},
@@ -65,37 +73,31 @@ function BlackJack (playerCount, decks) {
     'AD': { img: 'images/ad.gif', value: 11},
     'AH': { img: 'images/ah.gif', value: 11}
   }
-  function cardValues(card, type) {
-    return type == 'soft' ? this.card[card].value : this.card[card].value === 11 ? 1 : this.card[card].value;
-  /*
-  switch (card[0]) {
-    case 'A':
-      return type === 'soft' ? 11 : 1;
-      break;
-    case 'J':
-    case 'Q':
-    case 'K':
-      return 10;
-      break;
-    default:
-      return parseInt(card);*/
+  this.cardValues = function(card) {
+    return self.card[card].value;
   }
 
-
-function sumCards (pCard, cCard) {
-  console.log('sumCards');
-  return pCard + cCard;
-}
-  this.dealerHitLimit = 18,
-  this.cardsInShoe = [],
-  this.decks = decks !== undefined ? decks : 1;
-  this.deck = {
-
+  this.sumCards = function(pCard, cCard) {
+    return pCard + cCard;
   }
+  this.addCardToShoe = function(i) {
+    $('#shoe').append('<div class="shoeCard" id="s'+i+'" style="margin-top: '+i*((self.shoeHeight-self.cardWidth)/self.cardsInShoe.length)+'px;"></div>');
+  }
+  this.fillShoe = function() {
+    for (var i = 0; i < this.cardsInShoe.length; i++) {
+      window.setTimeout(self.addCardToShoe, 200, i);
+
+    }
+  }
+
   this.shuffleCards = function() {
-    this.cardsInShoe = '123456789JQKA'.repeat(1 * this.decks).split('').map(function(c){return [c+'C', c+'S', c+'D', c+'H'];}).reduce(function(p,c){return p.concat(c);}).sort(function() {
+    $('#discard-pile').html('');
+    $('#shoe').html('');
+    this.cardsInDiscard = 0;
+    this.cardsInShoe = '23456789TJQKA'.repeat(1 * this.decks).split('').map(function(c){return [c+'C', c+'S', c+'D', c+'H'];}).reduce(function(p,c){return p.concat(c);}).sort(function() {
       return 0.5 - Math.random();
     });
+    this.fillShoe();
   }
 
 
@@ -103,25 +105,72 @@ function sumCards (pCard, cCard) {
   function Player(name) {
     this.name = name !== undefined ? name : 'Player';
     this.cards = [];
+    this.handValue = 0;
     this.newShoe = function() {
       self.shuffleCards();
       this.hit();
     }
+    this.zeroHands = function() {
+      self.players.forEach(function(p) {p.handValue = 0;});
+      self.dealer.handValue = 0;
+    }
+    this.checkHand = function() {
+      this.hand();
+      if (this.cards.length === 2 && this.handValue === 21) {
+        $('#hand-result').text(this.name.toUpperCase()+' BLACKJACK!');
+        self.handInPlay = false;
+        this.zeroHands();
+      } else if (this.handValue > 21) {
+        $('#hand-result').text(this.name.toUpperCase()+' BUSTED!');
+        self.handInPlay = false;
+        this.zeroHands();
+      }
+    }
     this.hit = function() {
-      var card = self.cardsInShoe.length > 2 ? self.cardsInShoe.shift() : self.newShoe();
+      if (self.handInPlay === false) return;
+      if (this.handValue > 21) return;
+      var card = self.cardsInShoe.length > 1 ? self.cardsInShoe.shift() : this.newShoe();
       this.cards.push(card);
+      self.cardsInPlay++;
+      this.hand();
+      $('#shoe').children().last().remove();
+
+      if (card !== undefined) {
+        this.name !== 'Dealer' ? $('#player0cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>') :
+        $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+      }
+      this.checkHand();
+      return card;
     }
 
     this.hand = function() {
-      var softLimit = this.name === 'dealer' ? 18 : 22
-      var softHand = this.cards.map(self.cardValues,'soft').reduce(self.sumCards);
-      var hardHand = this.cards.map(self.cardValues).reduce(self.sumCards);
-      return softHand < softLimit ? softHand : hardHand;
+      var softLimit = 22;
+      var hand = this.cards.map(self.cardValues).reduce(self.sumCards);
+      // Count the number of Aces and subtract 10 or each Ace to keep the hand under 21
+      var aces = this.cards.filter(function(e) {
+        return /^A/.test(e);
+      });
+      if (this !== self.dealer) {
+        aces.forEach(function(){
+          if (hand > 21) {
+            hand = hand - 10;
+          }
+        });
+      }
+      this.handValue = hand;
     }
-  }
+    this.showHandValue = function() {
+      value = this.hand();
+      if (this.name === 'Dealer') {
+        $('#dealer-value').text(value);
+      } else {
+        $('#player0value').text(value);
+      }
+    }
+  } // Player
 
   this.addPlayer = function(name){
-    this.players.push(new this.Player(name));
+    this.players.push(new Player(name));
   }
 
   this.deletePlayer = function(name){
@@ -131,9 +180,38 @@ function sumCards (pCard, cCard) {
   }
 
   this.playerCount = playerCount !== undefined ? playerCount : 1;
-  this.dealer = new this.Player('Dealer');
+  this.dealer = new Player('Dealer');
   for (var i = 0; i < this.playerCount; i++) {
     this.addPlayer('Player'+i);
+  }
+
+  this.discardCards = function() {
+    this.dealer.zeroHands();
+    this.players.forEach(function(p,i) {
+      p.cards = [];
+      $('#player'+i+'value').text('');
+    });
+    this.dealer.cards = [];
+    $('dealer-value').text('');
+    for (this.cardsInPlay; this.cardsInPlay > 0; this.cardsInPlay--) {
+      var card = '#card'+this.cardsInPlay;
+      $(card).remove();
+      this.cardsInDiscard++;
+      $('#discard-pile').append('<img class="card" src="images/b.jpg" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"/>');
+    }
+
+  }
+  this.deal = function() {
+    $('#hand-result').text('');
+    if (this.handInPlay = true) {
+      this.discardCards();
+    }
+    for (var i = 0; i < 2; i++) {
+      this.players.forEach(function(p) {p.hit();})
+      this.dealer.hit();
+    }
+    this.handInPlay = true;
+
   }
 
 

@@ -11,46 +11,36 @@
     <div class="header table-row">
       <h1>Blackjack, let's play</h1>
     </div>
-    <div class="dealer-space table-row">DEALER SPACE
+    <div class="dealer-space table-row">
       <div id="shoe" class="table-col">
-        <div class='shoeCard' id="s0"></div>
-        <div class='shoeCard' id="s1" style="margin-top: 2px;"></div>
-        <div class='shoeCard' id="s2" style="margin-top: 4px;"></div>
-        <div class='shoeCard' id="s3" style="margin-top: 6px;"></div>
-        <div class='shoeCard' id="s4" style="margin-top: 8px;"></div>
+
 
       </div>
       <div class="dealer table-col">Dealer Hand
-        <div class="handCards table-row">
-          <img src="images/b.jpg" class="card"/>
-          <img src="images/ah.gif" class="card" style="margin-left: 15px"/>
-          <img src="images/jh.gif" class="card" style="margin-left: 20px"/>
-        </div>
+        <div id="dealer-hand" class="handCards table-row">
 
-        <div class="value table-row">
-          DEALER HAND VALUE
         </div>
       </div>
-      <div class="discard table-col">
-        <img src="images/b.jpg" class="card"/>
+      <div class="table-col">
+      <div id="discard-pile" class="discard table-row">
+      </div>
+    </div>
+      <div id="dealer-value" class="value table-row">
       </div>
     </div>
     <div class="table-row">
       <div class="table-col"> <div class="button" id="deal">Deal</div> </div>
-      <div class="table-col" id="hand-result">HAND RESULT</div>
+      <div class="table-col" id="hand-result"></div>
     </div>
-    <div class="players table-row">PLAYERS SPACE
-      <div id="player0" style="float: right" class="table-col"><span class="player-name" title="Double click to change player's name">Player</span>
-        <div class="handCards table-row">
-          <img class="card" src="images/b.jpg"/>
-          <img class="card" src="images/as.gif" style="margin-left: 15px"/>
+    <div class="players table-row">
+      <div id="0" style="float: right" class="table-col"><span class="player-name" title="Double click to change player's name">Player</span>
+        <div id="player0cards" class="handCards table-row">
 
         </div>
-        <div class="value table-row">
-          PLAYER HAND VALUE
+        <div id="player0value" class="value table-row">
         </div>
         <div class="table-row playerButtons">
-          <div id="hit" class="button table-col">Hit Me</div>
+          <div id="0" class="hit button table-col">Hit Me</div>
           <div id="stand" class="button table-col">Stand</div>
       </div>
     </div>
@@ -119,6 +109,16 @@
     //implement plugin
     $('.player-name').editable().on('editsubmit', function (event, val) {
         console.log('text changed to ' + val);
+    });
+
+    // start the game
+    var game = new Blackjack();
+    game.shuffleCards();
+
+    $('#deal').click(function() {game.deal();});
+
+    $('.hit').click(function() {
+      game.players[$(this).attr('id')].hit();
     });
   </script>
   </body>
