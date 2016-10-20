@@ -204,8 +204,9 @@ function Blackjack (playerCount, decks) {
   }
 
   this.newPlayer = function(seat) {
-    if (handInPlay) {
-      alert('Please wait for the current hand to finish playing before joining the game.')
+    if (this.handInPlay) {
+      alert('Please wait for the current hand to finish playing before joining the game.');
+      return;
     }
     var name = this.getName();
     if (name === null) return;
