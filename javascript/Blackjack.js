@@ -106,9 +106,7 @@ function Blackjack (playerCount, decks) {
     this.name = name !== undefined ? name : 'Player';
     this.cards = [];
     this.handValue = 0;
-    console.log(seat);
     this.playerSeat = seat != undefined ? seat : 'dealer';
-    console.log(seat);
     if (this.playerSeat !== 'dealer') {
       this.playerDiv = '<div id="' +this.name+ '" style="float: right" class="table-col"><span class="player-name  name">' +this.name+ '</span><div id="' +this.name+ '-cards" class="handCards table-row"> </div><div id="' +this.name+ '-value" class="value table-row"></div><div class="table-row playerButtons"><div id="' +this.name+ '-hit" class="hit button table-col">Hit Me</div><div id="' +this.name+ '-stand" class="button table-col">Stand</div></div>  </div>';
       $('#'+seat).html(this.playerDiv);
@@ -195,7 +193,6 @@ function Blackjack (playerCount, decks) {
   this.dealer = new Player('Dealer');
 
   this.newPlayer = function(seat) {
-    console.log(seat);
     var name = prompt('Greetings, what is your name?');
     this.players.push( new Player(name, seat));
   }
