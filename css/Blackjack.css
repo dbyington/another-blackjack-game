@@ -2,7 +2,7 @@
 .body-table {
   background-image: url("../images/felt.jpg");
   background-size: 100%;
-  width: auto;
+  width: 400px;
   display: table;
   padding: 10px;
 }
@@ -75,9 +75,14 @@ img {
 #hand-result {
   font-size: 2em;
   font-weight: bold;
+  color: red;
   float: right;
+  height: 40px;
 }
-
+#discard-pile {
+  margin-left: 20px;
+  width: 30px;
+}
 .button {
   font-family: Arial;
   border: 1px solid black;
