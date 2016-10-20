@@ -72,15 +72,12 @@
     // start the game
     var game = new Blackjack();
     game.shuffleCards();
-
-    $('#deal').click(function() {game.deal();});
-
-    $('.hit').click(function() {
-      game.players[$(this).attr('id')].hit();
-    });
     $('.addseat').click(function() {
       game.newPlayer($(this).parent().attr('id'));
     })
+    $('#deal').click(function() {game.deal();});
+
+
   </script>
   </body>
 </html>
