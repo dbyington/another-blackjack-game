@@ -108,7 +108,7 @@ function Blackjack (playerCount, decks) {
     this.handValue = 0;
     this.newShoe = function() {
       self.shuffleCards();
-      this.hit();
+      return self.cardsInShoe.shift();
     }
     this.zeroHands = function() {
       self.players.forEach(function(p) {p.handValue = 0;});
@@ -156,6 +156,10 @@ function Blackjack (playerCount, decks) {
             hand = hand - 10;
           }
         });
+      } else {
+        if (hand > 21 && aces.length > 1) {
+          hand = hand - 10;
+        }
       }
       this.handValue = hand;
     }
@@ -198,6 +202,7 @@ function Blackjack (playerCount, decks) {
       $(card).remove();
       this.cardsInDiscard++;
       $('#discard-pile').append('<img class="card" src="images/b.jpg" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"/>');
+      //$('#discard-pile').append('<div class="card" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"></div>');
     }
 
   }
