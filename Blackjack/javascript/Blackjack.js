@@ -204,7 +204,11 @@ function Blackjack (playerCount, decks) {
   }
 
   this.newPlayer = function(seat) {
+    if (handInPlay) {
+      alert('Please wait for the current hand to finish playing before joining the game.')
+    }
     var name = this.getName();
+    if (name === null) return;
     this.players.push( new Player(name, seat));
   }
 
@@ -230,6 +234,7 @@ function Blackjack (playerCount, decks) {
 
   }
   this.deal = function() {
+    if (this.players.length < 1) return;
     $('#hand-result').text('');
     if (this.handInPlay = true) {
       this.discardCards();
@@ -239,7 +244,6 @@ function Blackjack (playerCount, decks) {
       this.dealer.hit();
     }
     this.handInPlay = true;
-
   }
 
 
