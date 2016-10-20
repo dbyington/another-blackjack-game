@@ -2,7 +2,7 @@
 .body-table {
   background-image: url("../images/felt.jpg");
   background-size: 100%;
-  width: 400px;
+  width: 450px;
   display: table;
   padding: 10px;
 }
@@ -25,6 +25,7 @@ img {
   font-family: serif, sans-serif;
   border: 2px solid black;
   width: 90%;
+  height: 100px;
 }
 .dealer {
   border: 2px solid blue;
@@ -60,6 +61,16 @@ img {
   float: inherit;
   margin-left: 15px;
   font-family: "Comic Sans MS";
+}
+
+.players {
+  height: 150px;
+  float: right;
+  padding: 10px;
+  margin: 10px;
+}
+.addseat {
+  float: right;
 }
 .handCards {
   height: 120px;
