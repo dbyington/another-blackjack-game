@@ -104,11 +104,12 @@ function Blackjack (playerCount, decks) {
   // Player object
   function Player(name, seat) {
     this.name = name !== undefined ? name : 'Player';
+    this.playerId = self.players.length;
     this.cards = [];
     this.handValue = 0;
     this.playerSeat = seat != undefined ? seat : 'dealer';
     if (this.playerSeat !== 'dealer') {
-      this.playerDiv = '<div id="' +this.name+ '" style="float: right" class="table-col"><span class="player-name  name">' +this.name+ '</span><div id="' +this.name+ '-cards" class="handCards table-row"> </div><div id="' +this.name+ '-value" class="value table-row"></div><div class="table-row playerButtons"><div id="' +this.name+ '-hit" class="hit button table-col">Hit Me</div><div id="' +this.name+ '-stand" class="button table-col">Stand</div></div>  </div>';
+      this.playerDiv = '<div id="' +this.name+ '" style="float: right" class="table-col"><span class="player-name  name">' +this.name+ '</span><div id="' +this.name+ '-cards" class="handCards table-row"> </div><div id="' +this.name+ '-value" class="value table-row"></div><div class="table-row playerButtons"><div id="' +this.name+ '-hit" class="hit button table-col" onclick="game.players['+this.playerId+'].hit();">Hit Me</div><div id="' +this.name+ '-stand" class="stand button table-col">Stand</div></div>  </div>';
       $('#'+seat).html(this.playerDiv);
     }
 
@@ -143,7 +144,7 @@ function Blackjack (playerCount, decks) {
       $('#shoe').children().last().remove();
 
       if (card !== undefined) {
-        this.name !== 'Dealer' ? $('#player0cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>') :
+        this.name !== 'Dealer' ? $('#'+this.name+'-cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>') :
         $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
       }
       this.checkHand();
@@ -175,14 +176,11 @@ function Blackjack (playerCount, decks) {
       if (this.name === 'Dealer') {
         $('#dealer-value').text(value);
       } else {
-        $('#player0value').text(value);
+        $('#'+this.name+'-value').text(value);
       }
     }
   } // Player
 
-  this.addPlayer = function(name){
-    this.players.push(new Player(name));
-  }
 
   this.deletePlayer = function(name){
     this.players = this.players.filter(function(e) {
@@ -192,8 +190,21 @@ function Blackjack (playerCount, decks) {
 
   this.dealer = new Player('Dealer');
 
+  this.getName = function(calledBefore) {
+    var name;
+    if (calledBefore) {
+      name = prompt('Sorry, that name has been taken. Please choose another name.')
+    } else {
+      name = prompt('Greetings, what is your name?');
+    }
+    if (this.players.find(function(p){return p.name === name}) !== undefined) {
+      name = this.getName(true)
+    }
+    return name;
+  }
+
   this.newPlayer = function(seat) {
-    var name = prompt('Greetings, what is your name?');
+    var name = this.getName();
     this.players.push( new Player(name, seat));
   }
 
