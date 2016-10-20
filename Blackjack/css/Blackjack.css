@@ -6,6 +6,7 @@
   display: table;
   padding: 10px;
 }
+
 .table-row {
   display: table-row;
   width: auto;
@@ -20,7 +21,6 @@ img {
   width: 64px;
 }
 .header {
-  background-color: lightgreen;
   text-align: center;
   font-family: serif, sans-serif;
   border: 2px solid black;
@@ -83,6 +83,14 @@ img {
   margin-left: 20px;
   width: 30px;
 }
+.discard-card {
+  width: 64px;
+  height: 100px;
+  position: absolute;
+  margin: 5px;
+  background-image: url("../images/b.jpg");
+}
+
 .button {
   font-family: Arial;
   border: 1px solid black;
