@@ -1,4 +1,6 @@
-
+html {
+  color: lightgoldenrodyellow;
+}
 .body-table {
   background-image: url("../images/felt.jpg");
   background-size: 100%;
@@ -28,16 +30,21 @@ img {
   height: 100px;
 }
 .dealer {
-  border: 2px solid blue;
-  height: 200px;
-  margin: 10px;
-  border: 5px;
+  border: 3px solid darkgoldenrod;
+  height: 155px;
+  width: 140px;
+  border-radius: 10px;
+  padding-left: 3px;
+  padding-top: 3px;
+  margin-left: 10px;
+  font-size: 1.3em;
 }
 #shoe {
-  border: 1px solid black;
-  border-radius: 4px;
+  border: 3px solid darkgoldenrod;
+  border-radius: 10px;
   margin-left: auto;
-  height: 150px;
+  padding-top: 3px;
+  height: 155px;
   width: 110px;
   float: left;
 }
@@ -63,17 +70,8 @@ img {
   font-family: "Comic Sans MS";
 }
 
-.players {
-  height: 150px;
-  float: right;
-  padding: 10px;
-  margin: 10px;
-}
-.addseat {
-  float: right;
-}
 .handCards {
-  height: 120px;
+  height: 100px;
   width: 120px;
 
 }
@@ -83,16 +81,24 @@ img {
 .value {
   position: relative;
 }
+.result {
+  height: 50px;
+}
 #hand-result {
-  font-size: 2em;
+  font-size: 1.4em;
   font-weight: bold;
-  color: red;
+  color: lightgoldenrodyellow;
   float: right;
-  height: 40px;
 }
 #discard-pile {
   margin-left: 20px;
-  width: 30px;
+  height: 155px;
+  width: 150px;
+  border: 3px solid darkgoldenrod;
+  border-radius: 10px;
+  margin-left: 10px;
+  padding-top: 3px;
+
 }
 .discard-card {
   width: 64px;
@@ -100,6 +106,19 @@ img {
   position: absolute;
   margin: 5px;
   background-image: url("../images/b.jpg");
+}
+.player-seat {
+  width: 140px;
+  height: 160px;
+  border: 3px solid darkgoldenrod;
+  border-radius: 10px;
+  margin-left: 2px;
+}
+.player-name {
+  padding-left: 3px;
+  font-size: 1.3em;
+  color: lightgoldenrodyellow;
+
 }
 .playerButtons {
   display: none;
@@ -109,6 +128,7 @@ img {
   border: 1px solid black;
   border-radius: 4px;
   background-color: lightblue;
+  color: black;
   box-shadow: 2px 2px 5px blue;
   height: auto;
   width: auto;
@@ -133,9 +153,13 @@ img {
   border: 1px solid black;
   border-radius: 4px;
   background-color: red;
-  box-shadow: 2px 2px 5px white;
+  box-shadow: inherit;
   height: auto;
   width: auto;
   margin: 5px 4px 2px 4px;
   padding: 0 5px 0 5px;
+}
+
+.footer {
+  color: black;
 }
