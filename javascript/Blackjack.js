@@ -168,8 +168,18 @@ function Blackjack (playerCount, decks) {
       $('#shoe').children().last().remove();
 
       if (card !== undefined) {
-        this.name !== 'Dealer' ? $('#'+this.name+'-cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>') :
-        $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+        if (this.name !== 'Dealer') {
+
+           $('#'+this.name+'-cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+         } else {
+           if (self.dealer.cards.length < 2) {
+             console.log('card back');
+             $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="images/b.jpg" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+           } else {
+             console.log('card front');
+             $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+           }
+         }
       }
       this.checkHand();
       //return card;
@@ -195,6 +205,8 @@ function Blackjack (playerCount, decks) {
       }
       this.handValue = hand;
     }
+
+
     this.showHandValue = function() {
       value = this.hand();
       if (this.name === 'Dealer') {
@@ -204,6 +216,7 @@ function Blackjack (playerCount, decks) {
       }
     }
   } // Player
+  this.dealer = new Player('Dealer');
 
 
   this.deletePlayer = function(name){
@@ -211,8 +224,6 @@ function Blackjack (playerCount, decks) {
       return e.name === name ? false : true;
     });
   }
-
-  this.dealer = new Player('Dealer');
 
 
   this.getName = function(calledBefore) {
@@ -229,6 +240,7 @@ function Blackjack (playerCount, decks) {
     return name;
   }
 
+
   this.newPlayer = function(seat) {
     if (this.handInPlay) {
       alert('Please wait for the current hand to finish playing before joining the game.');
@@ -238,6 +250,7 @@ function Blackjack (playerCount, decks) {
     if (name === null) return;
     this.players.push( new Player(name, seat));
   }
+
 
   this.randomDiscard = function() {
     var top = Math.floor(Math.random() * 51);
@@ -258,17 +271,19 @@ function Blackjack (playerCount, decks) {
       $(card).remove();
       this.cardsInDiscard++;
       $('#discard-pile').append(this.randomDiscard());
-      //$('#discard-pile').append('<div class="card" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"></div>');
     }
 
   }
 
   this.dealerFinishHand = function() {
+    $('#card2').attr('src','images/'+this.dealer.cards[0].toLowerCase()+'.gif');
     while (this.dealer.handValue < 17) {
       this.dealer.hit();
     }
     console.log('done with hand.');
   }
+
+
   this.makeSeatIterator = function() {
     var nextIndex = 0;
     var iterator = [];
@@ -300,6 +315,7 @@ function Blackjack (playerCount, decks) {
     //this.currentPlayer = this.seatsInRound.next().value;
     //this.currentPlayer.toggleInPlay();
   }
+
 
 
 
