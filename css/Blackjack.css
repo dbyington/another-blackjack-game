@@ -63,12 +63,7 @@ img {
   margin-left: +5px;
 
 }
-#dealer {
-  height: 150px;
-  float: inherit;
-  margin-left: 15px;
-  font-family: "Comic Sans MS";
-}
+
 
 .handCards {
   height: 100px;
@@ -90,8 +85,7 @@ img {
   color: lightgoldenrodyellow;
   float: right;
 }
-#discard-pile {
-  margin-left: 20px;
+.discards {
   height: 155px;
   width: 150px;
   border: 3px solid darkgoldenrod;
@@ -103,9 +97,7 @@ img {
 .discard-card {
   width: 64px;
   height: 100px;
-  position: absolute;
   margin: 5px;
-  background-image: url("../images/b.jpg");
 }
 .player-seat {
   width: 140px;
