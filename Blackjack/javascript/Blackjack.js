@@ -13,6 +13,8 @@ function Blackjack (playerCount, decks) {
   this.cardsInShoe = [];
   this.cardsInPlay = 0;
   this.cardsInDiscard = 0;
+  this.timeout = 3000;
+  this.playerSeats = {'seat1': undefined, 'seat2': undefined, 'seat3': undefined};
   this.decks = decks !== undefined ? decks : 1;
   this.deck = {
 
@@ -107,12 +109,17 @@ function Blackjack (playerCount, decks) {
     this.playerId = self.players.length;
     this.cards = [];
     this.handValue = 0;
+    this.inPlay = false;
     this.playerSeat = seat != undefined ? seat : 'dealer';
     if (this.playerSeat !== 'dealer') {
       this.playerDiv = '<div id="' +this.name+ '" style="float: right" class="table-col"><span class="player-name  name">' +this.name+ '</span><div id="' +this.name+ '-cards" class="handCards table-row"> </div><div id="' +this.name+ '-value" class="value table-row"></div><div class="table-row playerButtons"><div id="' +this.name+ '-hit" class="hit button table-col" onclick="game.players['+this.playerId+'].hit();">Hit Me</div><div id="' +this.name+ '-stand" class="stand button table-col">Stand</div></div>  </div>';
       $('#'+seat).html(this.playerDiv);
+      self.playerSeats[seat] = this;
     }
-
+    this.toggleInPlay = function() {
+      this.inPlay = this.inPlay === false ? true : false;
+      $('#'+this.name+' > .playerButtons').toggle();
+    }
 
     this.newShoe = function() {
       self.shuffleCards();
@@ -125,13 +132,17 @@ function Blackjack (playerCount, decks) {
     this.checkHand = function() {
       this.hand();
       if (this.cards.length === 2 && this.handValue === 21) {
-        $('#hand-result').text(this.name.toUpperCase()+' BLACKJACK!');
-        self.handInPlay = false;
-        this.zeroHands();
+        this.toggleInPlay();
+        $('#hand-result').text(this.name+'BLACKJACK!');
+        window.setTimeout(function() {
+          $('#hand-result').text('');
+        }, self.timeout);
       } else if (this.handValue > 21) {
-        $('#hand-result').text(this.name.toUpperCase()+' BUSTED!');
-        self.handInPlay = false;
-        this.zeroHands();
+        this.toggleInPlay();
+        $('#hand-result').text(this.name+' BUSTED!');
+        window.setTimeout(function() {
+          $('#hand-result').text('');
+        }, self.timeout);
       }
     }
     this.hit = function() {
@@ -190,6 +201,7 @@ function Blackjack (playerCount, decks) {
 
   this.dealer = new Player('Dealer');
 
+
   this.getName = function(calledBefore) {
     var name;
     if (calledBefore) {
@@ -234,9 +246,37 @@ function Blackjack (playerCount, decks) {
     }
 
   }
+  this.finishPlayerHand = function(player) {
+    //while (player.inPlay === true) {
+
+    //}
+    return 0;
+  }
+  this.playHand = function(player) {
+    console.log(player);
+    player.toggleInPlay();
+    this.finishPlayerHand(player);
+
+  }
+  this.dealerFinishHand = function() {
+    while (this.dealer.handValue < 17) {
+      this.dealer.hit();
+    }
+  }
+  this.playRound = function() {
+    for (seat in this.playerSeats) {
+      if (this.playerSeats[seat] !== undefined) {
+        this.playHand(this.playerSeats[seat]);
+      }
+    }
+    this.dealerFinishHand();
+    //results here
+    this.handInPlay = false;
+  }
   this.deal = function() {
-    if (this.players.length < 1) return;
+    console.log(this.playerSeats);
     $('#hand-result').text('');
+    if (this.players.length < 1) return;
     if (this.handInPlay = true) {
       this.discardCards();
     }
@@ -245,6 +285,7 @@ function Blackjack (playerCount, decks) {
       this.dealer.hit();
     }
     this.handInPlay = true;
+    this.playRound();
   }
 
 
