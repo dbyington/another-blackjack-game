@@ -239,7 +239,12 @@ function Blackjack (playerCount, decks) {
     this.players.push( new Player(name, seat));
   }
 
-
+  this.randomDiscard = function() {
+    var top = Math.floor(Math.random() * 51);
+    var left = Math.floor(Math.random() * (151-64));
+    //return '<div class="card discard-card" style="margin-left: '+left+'px; margin-top: '+top+'.px"/></div>'
+    return '<img class="card discard-card" src="images/b.jpg" style="margin-left: '+left+'px; margin-top: '+top+'.px"/>'
+  }
   this.discardCards = function() {
     this.dealer.zeroHands();
     this.players.forEach(function(p,i) {
@@ -252,7 +257,7 @@ function Blackjack (playerCount, decks) {
       var card = '#card'+this.cardsInPlay;
       $(card).remove();
       this.cardsInDiscard++;
-      $('#discard-pile').append('<img class="card" src="images/b.jpg" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"/>');
+      $('#discard-pile').append(this.randomDiscard());
       //$('#discard-pile').append('<div class="card" style="margin-left: '+this.cardsInDiscard+'; margin-top: '+this.cardsInDiscard+'"></div>');
     }
 
