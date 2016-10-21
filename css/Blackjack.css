@@ -101,7 +101,9 @@ img {
   margin: 5px;
   background-image: url("../images/b.jpg");
 }
-
+.playerButtons {
+  display: none;
+}
 .button {
   font-family: Arial;
   border: 1px solid black;
