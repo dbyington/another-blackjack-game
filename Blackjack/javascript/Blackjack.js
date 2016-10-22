@@ -107,7 +107,8 @@ function Blackjack (playerCount, decks) {
 
   // Player object
   function Player(name, seat) {
-    this.name = name !== undefined ? name : 'Player';
+    if (name === undefined) return;
+    this.name = name;
     this.playerId = self.players.length;
     this.cards = [];
     this.playerSeat = seat != undefined ? seat : 'dealer';
@@ -129,7 +130,7 @@ function Blackjack (playerCount, decks) {
 
     this.stand = function () {
       this.toggleInPlay();
-      if (self.currentPlayer.name !== 'Dealer') {
+      if (self.currentPlayer !== self.dealer) {
         self.seatsInRound.next().value.toggleInPlay();
       } else {
         self.dealerFinishHand();
@@ -266,8 +267,8 @@ function Blackjack (playerCount, decks) {
     if (this.players.find(function(p){return p.name === name}) !== undefined) {
       name = this.getName(true)
     }
-    if (name === '') return;
-    return name;
+    name = name.match(/[\w*]/g);
+    if (name !== null) return name.join('').slice(0,8);
   }
 
 
@@ -277,7 +278,7 @@ function Blackjack (playerCount, decks) {
       return;
     }
     var name = this.getName();
-    if (name === null) return;
+    if (name === null || name === undefined || name === '') return;
     this.players.push( new Player(name, seat));
   }
 
