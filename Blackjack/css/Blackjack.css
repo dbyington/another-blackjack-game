@@ -7,6 +7,7 @@ html {
   width: 450px;
   display: table;
   padding: 10px;
+  font-family: Arial;
 }
 
 .table-row {
@@ -31,7 +32,7 @@ img {
 }
 .dealer {
   border: 3px solid darkgoldenrod;
-  height: 155px;
+  height: 150px;
   width: 140px;
   border-radius: 10px;
   padding-left: 3px;
@@ -43,8 +44,8 @@ img {
   border: 3px solid darkgoldenrod;
   border-radius: 10px;
   margin-left: auto;
-  padding-top: 3px;
-  height: 155px;
+  padding-top: 2px;
+  height: 150px;
   width: 110px;
   float: left;
 }
@@ -75,18 +76,18 @@ img {
 }
 .value {
   position: relative;
+  font-size:1.4em;
 }
 .result {
-  height: 50px;
+  height: 40px;
 }
 #hand-result {
-  font-size: 1.4em;
+  font-size: 1.3em;
   font-weight: bold;
-  color: lightgoldenrodyellow;
   float: right;
 }
 .discards {
-  height: 155px;
+  height: 150px;
   width: 150px;
   border: 3px solid darkgoldenrod;
   border-radius: 10px;
@@ -109,8 +110,6 @@ img {
 .player-name {
   padding-left: 3px;
   font-size: 1.3em;
-  color: lightgoldenrodyellow;
-
 }
 .playerButtons {
   display: none;
