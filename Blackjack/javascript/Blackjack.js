@@ -85,7 +85,7 @@ function Blackjack (playerCount, decks) {
   }
   this.fillShoe = function() {
     for (var i = 0; i < this.cardsInShoe.length; i++) {
-      window.setTimeout(self.addCardToShoe, 200, i);
+      self.addCardToShoe(i);
     }
   }
 
