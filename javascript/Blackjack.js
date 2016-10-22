@@ -11,8 +11,8 @@ function Blackjack (playerCount, decks) {
   this.dealerHitLimit = 18;
   this.handInPlay = false;
   this.cardsInShoe = [];
-  this.cardsInPlay = 0;
-  this.cardsInDiscard = 0;
+  this.cardsInPlay = [];
+  this.cardsInDiscard = [];
   this.timeout = 3000;
   this.currentPlayer = undefined;
   this.playerSeats = {'seat1': undefined, 'seat2': undefined, 'seat3': undefined};
@@ -86,17 +86,21 @@ function Blackjack (playerCount, decks) {
   this.fillShoe = function() {
     for (var i = 0; i < this.cardsInShoe.length; i++) {
       window.setTimeout(self.addCardToShoe, 200, i);
-
     }
   }
 
   this.shuffleCards = function() {
     $('#discard-pile').html('');
     $('#shoe').html('');
-    this.cardsInDiscard = 0;
-    this.cardsInShoe = '23456789TJQKA'.repeat(1 * this.decks).split('').map(function(c){return [c+'C', c+'S', c+'D', c+'H'];}).reduce(function(p,c){return p.concat(c);}).sort(function() {
+    if (this.cardsInDiscard.length === 0) {
+      this.cardsInDiscard = [];
+      this.cardsInShoe = '23456789TJQKA'.repeat(1 * this.decks).split('').map(function(c){return [c+'C', c+'S', c+'D', c+'H'];}).reduce(function(p,c){return p.concat(c);}).sort(function() {
       return 0.5 - Math.random();
-    });
+      });
+    } else {
+      this.cardsInShoe = this.cardsInShoe.concat(this.cardsInDiscard.sort(function() {return 0.5 - Math.random();}));
+      this.cardsInDiscard = [];
+    }
     this.fillShoe();
   }
 
@@ -171,19 +175,19 @@ function Blackjack (playerCount, decks) {
       if (this.handValue > 21) return;
       var card = self.cardsInShoe.length > 1 ? self.cardsInShoe.shift() : this.newShoe();
       this.cards.push(card);
-      self.cardsInPlay++;
+      self.cardsInPlay.push(card);
       this.hand();
       $('#shoe').children().last().remove();
 
       if (card !== undefined) {
         if (this.name !== 'Dealer') {
 
-           $('#'+this.name+'-cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+           $('#'+this.name+'-cards').append('<img id="'+card+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
          } else {
            if (self.dealer.cards.length < 2) {
-             $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="images/b.jpg" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+             $('#dealer-hand').append('<img id="'+card+'" class="card" src="images/b.jpg" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            } else {
-             $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+             $('#dealer-hand').append('<img id="'+card+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            }
          }
       }
@@ -293,12 +297,12 @@ function Blackjack (playerCount, decks) {
     });
     this.dealer.cards = [];
     $('dealer-value').text('');
-    for (this.cardsInPlay; this.cardsInPlay > 0; this.cardsInPlay--) {
-      var card = '#card'+this.cardsInPlay;
-      $(card).remove();
-      this.cardsInDiscard++;
-      $('#discard-pile').append(this.randomDiscard());
-    }
+    this.cardsInDiscard = this.cardsInDiscard.concat(self.cardsInPlay);
+    this.cardsInPlay.forEach(function(c) {
+      $('#'+c).remove();
+      $('#discard-pile').append(self.randomDiscard());
+    })
+    this.cardsInPlay = [];
 
   }
 
