@@ -17,7 +17,6 @@ function Blackjack (playerCount, decks) {
   this.currentPlayer = undefined;
   this.playerSeats = {'seat1': undefined, 'seat2': undefined, 'seat3': undefined};
   this.decks = decks !== undefined ? decks : 1;
-
   this.shoeHeight = 150;
   this.cardWidth = 64;
   this.card = {
