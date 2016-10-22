@@ -44,7 +44,8 @@ img {
   border: 3px solid darkgoldenrod;
   border-radius: 10px;
   margin-left: auto;
-  padding-top: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   height: 150px;
   width: 110px;
   float: left;
