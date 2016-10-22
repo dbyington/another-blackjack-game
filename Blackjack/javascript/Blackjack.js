@@ -164,7 +164,7 @@ function Blackjack (playerCount, decks) {
       } else if (this.handValue > 21) { //busted
         this.toggleInPlay();
         if (self.currentPlayer.name !== 'Dealer') self.seatsInRound.next().value.toggleInPlay();
-        $('#'+this.name+'-value').text(this.handValue+': BUSTED!');
+        $('#'+this.name+'-value').text('BUSTED!');
       }
     }
     this.hit = function() {
@@ -210,6 +210,10 @@ function Blackjack (playerCount, decks) {
       $('#'+this.name+' > .playerButtons').toggle();
     }
 
+    this.toggleButtonsOff = function() {
+      $('#'+this.name+' > .playerButtons').hide();
+    }
+
     this.showHandValue = function() {
       value = this.hand();
       if (this.name === 'Dealer') {
@@ -220,6 +224,13 @@ function Blackjack (playerCount, decks) {
     }
   } // Player
   this.dealer = new Player('Dealer');
+
+
+  this.disableAllButtons = function() {
+    this.players.forEach(function(p) {
+      p.toggleButtonsOff();
+    });
+  }
 
 
   this.deletePlayer = function(name){
@@ -306,11 +317,11 @@ function Blackjack (playerCount, decks) {
     if (this.dealer.isBlackjack()) {
       var playerBlackjacks = this.players.find(function(p){
           return p.handValue === 21 && p.cards.length === 2});
-      if (playerBlackjacks.length === 0) {
+      if (playerBlackjacks === undefined) {
         result = 'BLACKJACK!';
       }
     } else if (this.dealer.handValue > 21) {
-      result = this.dealer.handValue+': BUSTED!';
+      result = 'BUSTED!';
     }
     $('#dealer-value').text(result);
   }
@@ -344,8 +355,9 @@ function Blackjack (playerCount, decks) {
   } */
 
   this.finishHand = function() {
+    this.disableAllButtons();
     this.players.forEach(self.playerStatus);
-    //this.dealerStatus();
+    this.dealerStatus();
   }
 
   this.dealerFinishHand = function() {
@@ -382,18 +394,19 @@ function Blackjack (playerCount, decks) {
 
   this.deal = function() {
     this.clearAll();
+    this.disableAllButtons();
     if (this.players.length < 1) return;
     if (this.handInPlay = true) {
       this.discardCards();
     }
     this.handInPlay = true;
     this.seatsInRound = this.makeSeatIterator();
+    this.seatsInRound.next().value.toggleInPlay();
     for (var i = 0; i < 2; i++) {
       this.players.forEach(function(p) {p.hit();})
       this.dealer.hit();
     }
 
-    this.seatsInRound.next().value.toggleInPlay();
 
   }
 
