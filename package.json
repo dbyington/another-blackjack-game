@@ -1,0 +1,22 @@
+{
+  "name": "codeworks",
+  "version": "1.0.0",
+  "description": "Code written for or at Codeworks",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/d_byington/Codeworks.git"
+  },
+  "keywords": [
+    "codeworks",
+    "javascript",
+    "js",
+    "code"
+  ],
+  "author": "Don Byington",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/d_byington/Codeworks#readme"
+}
