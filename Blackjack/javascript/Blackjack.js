@@ -417,7 +417,10 @@ function Blackjack (playerCount, decks) {
   this.deal = function() {
     this.clearAll();
     this.disableAllButtons();
-    if (this.players.length < 1) return;
+    if (this.players.length < 1) {
+      $('#hand-result').text('No players to deal to. Add a player.');
+      return;
+    };
     if (this.handInPlay = true) {
       this.discardCards();
     }
