@@ -115,16 +115,18 @@ function Blackjack (playerCount, decks) {
       $('#'+seat).html(this.playerDiv);
       self.playerSeats[seat] = this;
     }
+
+
     this.toggleInPlay = function() {
-      //this.inPlay = this.inPlay === false ? true : false;
-      $('#'+this.name+' > .playerButtons').toggle();
+      this.toggleButtons();
       self.currentPlayer = this;
       if (this.playerSeat === 'dealer') {
         self.dealerFinishHand();
       }
     }
+
+
     this.stand = function () {
-      console.log('stand:'+this.name);
       this.toggleInPlay();
       if (self.currentPlayer.name !== 'Dealer') {
         self.seatsInRound.next().value.toggleInPlay();
@@ -132,30 +134,37 @@ function Blackjack (playerCount, decks) {
         self.dealerFinishHand();
       }
     }
+
+
     this.newShoe = function() {
       self.shuffleCards();
       return self.cardsInShoe.shift();
     }
+
+
     this.zeroHands = function() {
       self.players.forEach(function(p) {p.handValue = 0;});
       self.dealer.handValue = 0;
     }
+
+
+    this.isBlackjack = function() {
+      return (this.cards.length === 2 && this.handValue === 21);
+    }
+
+
     this.checkHand = function() {
       this.hand();
-      if (this.cards.length === 2 && this.handValue === 21) { //blackjack
+      if ( this.isBlackjack() ) { //blackjack
+        if (self.currentPlayer == this) this.toggleInPlay();
+        if (self.currentPlayer.name !== 'Dealer') self.seatsInRound.next().value.toggleInPlay();
+        $('#'+this.name+'-value').text('BLACKJACK!');
         this.toggleInPlay();
         if (self.currentPlayer.name !== 'Dealer') self.seatsInRound.next().value.toggleInPlay();
-        $('#hand-result').text(this.name+'BLACKJACK!');
-        window.setTimeout(function() {
-          $('#hand-result').text('');
-        }, self.timeout);
       } else if (this.handValue > 21) { //busted
         this.toggleInPlay();
         if (self.currentPlayer.name !== 'Dealer') self.seatsInRound.next().value.toggleInPlay();
-        $('#hand-result').text(this.name+' BUSTED!');
-        window.setTimeout(function() {
-          $('#hand-result').text('');
-        }, self.timeout);
+        $('#'+this.name+'-value').text(this.handValue+': BUSTED!');
       }
     }
     this.hit = function() {
@@ -173,16 +182,13 @@ function Blackjack (playerCount, decks) {
            $('#'+this.name+'-cards').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
          } else {
            if (self.dealer.cards.length < 2) {
-             console.log('card back');
              $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="images/b.jpg" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            } else {
-             console.log('card front');
              $('#dealer-hand').append('<img id="card'+self.cardsInPlay+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            }
          }
       }
       this.checkHand();
-      //return card;
     }
 
     this.hand = function() {
@@ -192,20 +198,17 @@ function Blackjack (playerCount, decks) {
       var aces = this.cards.filter(function(e) {
         return /^A/.test(e);
       });
-      if (this !== self.dealer) {
-        aces.forEach(function(){
-          if (hand > 21) {
-            hand = hand - 10;
-          }
-        });
-      } else {
-        if (hand > 21 && aces.length > 1) {
+      aces.forEach(function(){
+        if (hand > 21) {
           hand = hand - 10;
         }
-      }
+      });
       this.handValue = hand;
     }
 
+    this.toggleButtons = function() {
+      $('#'+this.name+' > .playerButtons').toggle();
+    }
 
     this.showHandValue = function() {
       value = this.hand();
@@ -255,7 +258,6 @@ function Blackjack (playerCount, decks) {
   this.randomDiscard = function() {
     var top = Math.floor(Math.random() * 51);
     var left = Math.floor(Math.random() * (151-64));
-    //return '<div class="card discard-card" style="margin-left: '+left+'px; margin-top: '+top+'.px"/></div>'
     return '<img class="card discard-card" src="images/b.jpg" style="margin-left: '+left+'px; margin-top: '+top+'.px"/>'
   }
   this.discardCards = function() {
@@ -275,12 +277,84 @@ function Blackjack (playerCount, decks) {
 
   }
 
+
+  this.playerStatus = function(player) {
+    var result = '';
+    if (player.handValue > 21) {
+      result = 'BUSTED!';
+    } else if (player.isBlackjack()) {
+      if (self.dealer.isBlackjack() ) {
+        result = 'Push';
+      } else {
+        result = 'BLACKJACK!';
+      }
+    } else if (self.dealer.handValue > 21) {
+        result = 'Winner!';
+    } else if (player.handValue === self.dealer.handValue) {
+      result = 'Push';
+    } else if (player.handValue < self.dealer.handValue) {
+      result = 'Dealer won';
+    } else {
+      result = 'Winner!';
+    }
+    $('#'+player.name+'-value').text(result);
+  }
+
+
+  this.dealerStatus = function() {
+    var result = '';
+    if (this.dealer.isBlackjack()) {
+      var playerBlackjacks = this.players.find(function(p){
+          return p.handValue === 21 && p.cards.length === 2});
+      if (playerBlackjacks.length === 0) {
+        result = 'BLACKJACK!';
+      }
+    } else if (this.dealer.handValue > 21) {
+      result = this.dealer.handValue+': BUSTED!';
+    }
+    $('#dealer-value').text(result);
+  }
+  /*
+    var result = '';
+    var dealerWin = false;
+
+    if (this.dealer.isBlackjack()) {
+      var playerBlackjacks = this.players.find(function(p){
+          return p.handValue === 21 && p.cards.length === 2});
+      if (playerBlackjacks.length === 0) {
+        result = 'BLACKJACK!';
+      } else {
+        result = 'Push';
+      }
+    } else if (this.dealer.handValue > 21) {
+      result = this.dealer.handValue+': BUSTED!';
+    } else if (pushes.length > 0)
+    } else {
+       dealerWin = this.players.every(function(p) {
+        return p.handValue > 22 || p.handValue < self.dealer.handValue;
+      });
+      console.log(dealerWin);
+      if (dealerWin) {
+        result = 'Dealer Wins!';
+      } else {
+        result = 'Player Wins';
+      }
+    }
+    $('#dealer-value').text(result);
+  } */
+
+  this.finishHand = function() {
+    this.players.forEach(self.playerStatus);
+    //this.dealerStatus();
+  }
+
   this.dealerFinishHand = function() {
-    $('#card2').attr('src','images/'+this.dealer.cards[0].toLowerCase()+'.gif');
+    $('#dealer-hand > img').first().attr('src','images/'+this.dealer.cards[0].toLowerCase()+'.gif');
     while (this.dealer.handValue < 17) {
       this.dealer.hit();
     }
-    console.log('done with hand.');
+    this.handInPlay = false;
+    this.finishHand();
   }
 
 
@@ -288,8 +362,6 @@ function Blackjack (playerCount, decks) {
     var nextIndex = 0;
     var iterator = [];
     Object.keys(this.playerSeats).sort().forEach( function(seat) {
-      console.log('seat is '+seat);
-      console.log(self.playerSeats);
       if (self.playerSeats[seat] instanceof Object) {
         iterator.push(self.playerSeats[seat]);
       }
@@ -298,26 +370,31 @@ function Blackjack (playerCount, decks) {
     return iterator[Symbol.iterator]();
   }
 
-  this.deal = function() {
-    console.log(this.playerSeats);
+
+  this.clearAll = function() {
+    this.players.forEach(function(p) {
+      $('#'+p.name+'-value').text('');
+    })
+    $('#dealer-value').text('');
     $('#hand-result').text('');
+  }
+
+
+  this.deal = function() {
+    this.clearAll();
     if (this.players.length < 1) return;
     if (this.handInPlay = true) {
       this.discardCards();
     }
+    this.handInPlay = true;
+    this.seatsInRound = this.makeSeatIterator();
     for (var i = 0; i < 2; i++) {
       this.players.forEach(function(p) {p.hit();})
       this.dealer.hit();
     }
-    this.handInPlay = true;
-    this.seatsInRound = this.makeSeatIterator();
+
     this.seatsInRound.next().value.toggleInPlay();
-    //this.currentPlayer = this.seatsInRound.next().value;
-    //this.currentPlayer.toggleInPlay();
+
   }
-
-
-
-
 
 }
