@@ -286,7 +286,7 @@ function Blackjack (playerCount, decks) {
   this.randomDiscard = function() {
     var top = Math.floor(Math.random() * 51);
     var left = Math.floor(Math.random() * (151-64));
-    return '<img class="card discard-card" src="images/b.jpg" style="margin-left: '+left+'px; margin-top: '+top+'.px"/>'
+    return '<img class="card discard-card" src="images/b.jpg" style="margin-left: '+left+'px; margin-top: '+top+'px"/>'
   }
 
 
