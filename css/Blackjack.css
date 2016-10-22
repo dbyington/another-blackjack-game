@@ -129,10 +129,10 @@ img {
 }
 .button:hover {
   font-family: Arial;
-  color: red;
+  color: gold;
   border: 1px solid black;
   border-radius: 4px;
-  background-color: darkgreen;
+  background-color: black;
   box-shadow: 2px 2px 5px blue;
   height: auto;
   width: auto;
@@ -144,7 +144,7 @@ img {
   color: black;
   border: 1px solid black;
   border-radius: 4px;
-  background-color: red;
+  background-color: gold;
   box-shadow: inherit;
   height: auto;
   width: auto;
