@@ -106,8 +106,6 @@ function Blackjack (playerCount, decks) {
     this.name = name !== undefined ? name : 'Player';
     this.playerId = self.players.length;
     this.cards = [];
-    //this.handValue = 0;
-    this.inPlay = false;
     this.playerSeat = seat != undefined ? seat : 'dealer';
     if (this.playerSeat !== 'dealer') {
       this.playerDiv = '<div id="' +this.name+ '" class="table-col"><span class="player-name  name">' +this.name+ '</span><div id="' +this.name+ '-cards" class="handCards table-row"> </div><div id="' +this.name+ '-value" class="value table-row"></div><div class="table-row playerButtons"><div id="' +this.name+ '-hit" class="hit button table-col" onclick="game.players['+this.playerId+'].hitMe();">Hit Me</div><div id="' +this.name+ '-stand" class="stand button table-col"  onclick="game.players['+this.playerId+'].stand();">Stand</div></div>  </div>';
@@ -190,10 +188,6 @@ function Blackjack (playerCount, decks) {
          }
       }
       return this.stillInPlay();
-      //if (! this.stillInPlay() && this !== self.dealer) {
-      //  this.toggleInPlay();
-      //  self.seatsInRound.next().value.toggleInPlay();
-      //}
     }
 
 
@@ -240,6 +234,7 @@ function Blackjack (playerCount, decks) {
       }
     }
   } // Player
+  // create the dealer who is technically a player
   this.dealer = new Player('Dealer');
 
 
@@ -344,34 +339,7 @@ function Blackjack (playerCount, decks) {
     }
     $('#dealer-value').text(result);
   }
-  /*
-    var result = '';
-    var dealerWin = false;
 
-    if (this.dealer.isBlackjack()) {
-      var playerBlackjacks = this.players.find(function(p){
-          return p.handValue === 21 && p.cards.length === 2});
-      if (playerBlackjacks.length === 0) {
-        result = 'BLACKJACK!';
-      } else {
-        result = 'Push';
-      }
-    } else if (this.dealer.handValue > 21) {
-      result = this.dealer.handValue+': BUSTED!';
-    } else if (pushes.length > 0)
-    } else {
-       dealerWin = this.players.every(function(p) {
-        return p.handValue > 22 || p.handValue < self.dealer.handValue;
-      });
-      console.log(dealerWin);
-      if (dealerWin) {
-        result = 'Dealer Wins!';
-      } else {
-        result = 'Player Wins';
-      }
-    }
-    $('#dealer-value').text(result);
-  } */
 
   this.finishHand = function() {
     this.disableAllButtons();
