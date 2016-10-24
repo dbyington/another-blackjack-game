@@ -58,14 +58,6 @@ img {
   background-image: url("../images/shoeCard.jpg");
 }
 
-.playerCard {
-  width: 64px;
-  height: 100px;
-  position: absolute;
-  margin-left: +5px;
-
-}
-
 
 .handCards {
   height: 100px;
