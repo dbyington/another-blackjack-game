@@ -230,14 +230,6 @@ function Blackjack (playerCount, decks) {
       $('#'+this.name+' > .playerButtons').hide();
     }
 
-    this.showHandValue = function() {
-      value = this.hand();
-      if (this.name === 'Dealer') {
-        $('#dealer-value').text(value);
-      } else {
-        $('#'+this.name+'-value').text(value);
-      }
-    }
   } // Player
   // create the dealer who is technically a player
   this.dealer = new Player('Dealer');
@@ -246,13 +238,6 @@ function Blackjack (playerCount, decks) {
   this.disableAllButtons = function() {
     this.players.forEach(function(p) {
       p.toggleButtonsOff();
-    });
-  }
-
-
-  this.deletePlayer = function(name){
-    this.players = this.players.filter(function(e) {
-      return e.name === name ? false : true;
     });
   }
 
