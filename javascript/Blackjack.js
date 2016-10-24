@@ -71,8 +71,12 @@ function Blackjack (playerCount, decks) {
   }
 
 
-  this.zeroHands = function() {
-    self.players.forEach(function(p) {p.handValue = 0;});
+  this.emptyHands = function() {
+    self.players.forEach(function(p) {
+      p.cards = [];
+      p.handValue = 0;
+    });
+    this.dealer.cards = [];
     self.dealer.handValue = 0;
   }
 
@@ -95,7 +99,7 @@ function Blackjack (playerCount, decks) {
       this.toggleButtons();
       self.currentPlayer = this;
       if (this.playerSeat === 'dealer') {
-        self.dealerFinishHand();
+        self.finishDealerHand();
       }
     }
 
@@ -108,10 +112,6 @@ function Blackjack (playerCount, decks) {
         self.dealerFinishHand();
       }
     }
-
-
-
-
 
     this.isBlackjack = function() {
       return (this.cards.length === 2 && this.handValue === 21);
@@ -166,6 +166,7 @@ function Blackjack (playerCount, decks) {
         self.seatsInRound.next().value.toggleInPlay();
       }
     }
+
 
     this.getHandValue = function() {
       var softLimit = 22;
@@ -240,20 +241,13 @@ function Blackjack (playerCount, decks) {
 
 
   this.discardCards = function() {
-    this.zeroHands();
-    this.players.forEach(function(p,i) {
-      p.cards = [];
-      $('#player'+i+'value').text('');
-    });
-    this.dealer.cards = [];
-    $('dealer-value').text('');
+    this.emptyHands();
     this.cardsInDiscard = this.cardsInDiscard.concat(self.cardsInPlay);
     this.cardsInPlay.forEach(function(c) {
       $('#'+c).remove();
       $('#discard-pile').append(self.randomDiscard());
     })
     this.cardsInPlay = [];
-
   }
 
 
@@ -295,20 +289,20 @@ function Blackjack (playerCount, decks) {
   }
 
 
-  this.finishHand = function() {
+  this.finishPlayerHands = function() {
     this.disableAllButtons();
     this.players.forEach(self.playerStatus);
     this.dealerStatus();
   }
 
-  this.dealerFinishHand = function() {
+  this.finishDealerHand = function() {
     this.disableAllButtons();
     $('#dealer-hand > img').first().attr('src','images/'+this.dealer.cards[0].toLowerCase()+'.gif');
     while (this.dealer.handValue < 17) {
       this.dealer.hit();
     }
     this.handInPlay = false;
-    this.finishHand();
+    this.finishPlayerHands();
   }
 
 
