@@ -58,12 +58,12 @@
     $( document ).ready();
 
     // start the game
-    var game = new Blackjack();
-    game.shuffleCards();
+    var blackjackTable = new Blackjack();
+    blackjackTable.shuffleCards();
     $('.addseat').click(function() {
-      game.newPlayer($(this).parent().attr('id'));
+      blackjackTable.newPlayer($(this).parent().attr('id'));
     })
-    $('#deal').click(function() {game.deal();});
+    $('#deal').click(function() {blackjackTable.deal();});
 
 
   </script>
