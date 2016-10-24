@@ -19,62 +19,22 @@ function Blackjack (playerCount, decks) {
   this.decks = decks !== undefined ? decks : 1;
   this.shoeHeight = 150;
   this.cardWidth = 64;
-  this.card = {
-    '2C': { img: 'images/2c.gif', value: 2},
-    '2S': { img: 'images/2s.gif', value: 2},
-    '2D': { img: 'images/2d.gif', value: 2},
-    '2H': { img: 'images/2h.gif', value: 2},
-    '3C': { img: 'images/3c.gif', value: 3},
-    '3S': { img: 'images/3s.gif', value: 3},
-    '3D': { img: 'images/3d.gif', value: 3},
-    '3H': { img: 'images/3h.gif', value: 3},
-    '4C': { img: 'images/4c.gif', value: 4},
-    '4S': { img: 'images/4s.gif', value: 4},
-    '4D': { img: 'images/4d.gif', value: 4},
-    '4H': { img: 'images/4h.gif', value: 4},
-    '5C': { img: 'images/5c.gif', value: 5},
-    '5S': { img: 'images/5s.gif', value: 5},
-    '5D': { img: 'images/5d.gif', value: 5},
-    '5H': { img: 'images/5h.gif', value: 5},
-    '6C': { img: 'images/6c.gif', value: 6},
-    '6S': { img: 'images/6s.gif', value: 6},
-    '6D': { img: 'images/6d.gif', value: 6},
-    '6H': { img: 'images/6h.gif', value: 6},
-    '7C': { img: 'images/7c.gif', value: 7},
-    '7S': { img: 'images/7s.gif', value: 7},
-    '7D': { img: 'images/7d.gif', value: 7},
-    '7H': { img: 'images/7h.gif', value: 7},
-    '8C': { img: 'images/8c.gif', value: 8},
-    '8S': { img: 'images/8s.gif', value: 8},
-    '8D': { img: 'images/8d.gif', value: 8},
-    '8H': { img: 'images/8h.gif', value: 8},
-    '9C': { img: 'images/9c.gif', value: 9},
-    '9S': { img: 'images/9s.gif', value: 9},
-    '9D': { img: 'images/9d.gif', value: 9},
-    '9H': { img: 'images/9h.gif', value: 9},
-    'TC': { img: 'images/tc.gif', value: 10},
-    'TS': { img: 'images/ts.gif', value: 10},
-    'TD': { img: 'images/td.gif', value: 10},
-    'TH': { img: 'images/th.gif', value: 10},
-    'JC': { img: 'images/jc.gif', value: 10},
-    'JS': { img: 'images/js.gif', value: 10},
-    'JD': { img: 'images/jd.gif', value: 10},
-    'JH': { img: 'images/jh.gif', value: 10},
-    'QC': { img: 'images/qc.gif', value: 10},
-    'QS': { img: 'images/qs.gif', value: 10},
-    'QD': { img: 'images/qd.gif', value: 10},
-    'QH': { img: 'images/qh.gif', value: 10},
-    'KC': { img: 'images/kc.gif', value: 10},
-    'KS': { img: 'images/ks.gif', value: 10},
-    'KD': { img: 'images/kd.gif', value: 10},
-    'KH': { img: 'images/kh.gif', value: 10},
-    'AC': { img: 'images/ac.gif', value: 11},
-    'AS': { img: 'images/as.gif', value: 11},
-    'AD': { img: 'images/ad.gif', value: 11},
-    'AH': { img: 'images/ah.gif', value: 11}
-  }
+
+
   this.cardValues = function(card) {
-    return self.card[card].value;
+    switch (card[0]) {
+      case 'A':
+        return 11;
+        break;
+      case 'T':
+      case 'J':
+      case 'Q':
+      case 'K':
+        return 10;
+        break;
+      default:
+        return parseInt(card[0]);
+      }
   }
 
   this.sumCards = function(pCard, cCard) {
@@ -102,6 +62,18 @@ function Blackjack (playerCount, decks) {
       this.cardsInDiscard = [];
     }
     this.fillShoe();
+  }
+
+
+  this.newShoe = function() {
+    self.shuffleCards();
+    return self.cardsInShoe.shift();
+  }
+
+
+  this.zeroHands = function() {
+    self.players.forEach(function(p) {p.handValue = 0;});
+    self.dealer.handValue = 0;
   }
 
 
@@ -138,16 +110,7 @@ function Blackjack (playerCount, decks) {
     }
 
 
-    this.newShoe = function() {
-      self.shuffleCards();
-      return self.cardsInShoe.shift();
-    }
 
-
-    this.zeroHands = function() {
-      self.players.forEach(function(p) {p.handValue = 0;});
-      self.dealer.handValue = 0;
-    }
 
 
     this.isBlackjack = function() {
@@ -156,7 +119,7 @@ function Blackjack (playerCount, decks) {
 
 
     this.stillInPlay = function() {
-      this.hand();
+      this.getHandValue();
       if ( this.isBlackjack() ) { //blackjack
         $('#'+this.name+'-value').text('BLACKJACK!');
         if (this == self.dealer) {
@@ -174,21 +137,22 @@ function Blackjack (playerCount, decks) {
     this.hit = function() {
       if (self.handInPlay === false) return;
       if (this.handValue > 21) return;
-      var card = self.cardsInShoe.length > 1 ? self.cardsInShoe.shift() : this.newShoe();
+      var card = self.cardsInShoe.length > 1 ? self.cardsInShoe.shift() : self.newShoe();
       this.cards.push(card);
       self.cardsInPlay.push(card);
-      this.hand();
+      this.getHandValue();
       $('#shoe').children().last().remove();
 
       if (card !== undefined) {
+        cardImage = 'images/'+card.toLowerCase()+'.gif';
         if (this.name !== 'Dealer') {
 
-           $('#'+this.name+'-cards').append('<img id="'+card+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+           $('#'+this.name+'-cards').append('<img id="'+card+'" class="card" src="'+cardImage+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
          } else {
            if (self.dealer.cards.length < 2) {
              $('#dealer-hand').append('<img id="'+card+'" class="card" src="images/b.jpg" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            } else {
-             $('#dealer-hand').append('<img id="'+card+'" class="card" src="'+self.card[card].img+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
+             $('#dealer-hand').append('<img id="'+card+'" class="card" src="'+cardImage+'" style="margin-left: '+(this.cards.length-1)*15+'px"/>');
            }
          }
       }
@@ -203,7 +167,7 @@ function Blackjack (playerCount, decks) {
       }
     }
 
-    this.hand = function() {
+    this.getHandValue = function() {
       var softLimit = 22;
       if (this.cards.length === 0) {
         this.handValue = 0;
@@ -276,7 +240,7 @@ function Blackjack (playerCount, decks) {
 
 
   this.discardCards = function() {
-    this.dealer.zeroHands();
+    this.zeroHands();
     this.players.forEach(function(p,i) {
       p.cards = [];
       $('#player'+i+'value').text('');
