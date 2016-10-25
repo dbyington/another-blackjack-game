@@ -16,7 +16,7 @@ Once players have joined the game the Dealer deals clockwise starting with the p
 Players take turns "hitting" or "standing" beginning with the payer to the Dealer's left then going clockwise around the table. If a player gets a "blackjack" that player will be skipped. If the dealer gets a "blackjack" the hand is over and any players that got "blackjack" will be a "push".
 
 #### Winning
-A player wins when either they have a "blackjack", a hand value greater than the Dealer, or if the Dealer "busts", without the player having "busted."
+A player wins when either they have a "blackjack", a hand value greater than the Dealer, or if the Dealer "busts", without the player having "busted." If the Dealer busts then any player who has not busted wins.
 
 #### Card Values
 Numeric cards are considered the value on the card. Face cards (Jack, Queen, King) all have a value of 10. Aces are automatically demoted from soft (value of 11) to hard (value of 1) if the total hand value would be over 21 with a soft ace. If a hand has multiple aces only the number of aces needed will be demoted to hard to bring the hand total to 21 or less.
