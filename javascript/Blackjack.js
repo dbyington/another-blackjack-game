@@ -351,7 +351,7 @@ function Blackjack (playerCount, decks) {
       this.seatsInRound.next().value.toggleInPlay();
       this.currentPlayer.stillInPlay();
     } else {
-      this.dealerFinishHand();
+      this.finishDealerHand();
     }
 
   }
