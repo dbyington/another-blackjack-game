@@ -1,8 +1,6 @@
 # Blackjack code assignment game
 
 ### Written by Don Byington for [Codeworks](https://codeworks.me/) coding assignment
-Hosted in a private Bitbucket repo: [Blackjack](https://bitbucket.org/d_byington/codeworks/src/b35aa0fab84966737f62ebe9b9bdeb6d8780df62/Blackjack/?at=master)
-(contact [Don Byington](donby@blacknblue.com) for a repo invite)
 
 ### Three seat (player) game of Blackjack
 
