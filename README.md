@@ -2,6 +2,8 @@
 
 ### Written by Don Byington for [Codeworks](https://codeworks.me/) coding assignment
 
+### Play the game [here][http://dbyington.com/another-blackjack-game] 
+
 ### Three seat (player) game of Blackjack
 
 #### Players
